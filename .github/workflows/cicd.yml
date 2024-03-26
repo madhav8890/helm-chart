@@ -29,6 +29,21 @@ jobs:
       run: |   
          aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }} --region=${{ env.AWS_REGION }}
       
+    - name: Check Helm Release Existence
+      id: helm_check
+      run: |
+        if helm status ${{ env.HELM_CHART_NAME }} >/dev/null 2>&1; then
+          echo "Helm release ${{ env.HELM_CHART_NAME }} exists."
+          echo "::set-output name=exists::true"
+        else
+          echo "Helm release ${{ env.HELM_CHART_NAME }} does not exist."
+          echo "::set-output name=exists::false"
+        fi
+
     - name: Deploy Helm Chart To Amazon EKS Cluster 
+      if: steps.helm_check.outputs.exists == 'false'
       run: |
          helm install ${{ env.HELM_CHART_NAME }} nginx-helm-chart/
+      else
+      run: |
+         helm upgrade ${{ env.HELM_CHART_NAME }} nginx-helm-chart/
