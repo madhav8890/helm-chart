@@ -30,5 +30,5 @@ jobs:
 
     - name: Deploy Helm Chart To Amazon EKS Cluster
       run: |
-         helm install ${{ env.HELM_CHART_NAME }} nginx-helm-chart/
+         helm upgrade ${{ env.HELM_CHART_NAME }} nginx-helm-chart/
 
