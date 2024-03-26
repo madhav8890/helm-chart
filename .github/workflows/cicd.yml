@@ -29,6 +29,6 @@ jobs:
       run: |   
          aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }} --region=${{ env.AWS_REGION }}
       
-    - name: Deploy Helm Chart To Amazon EKS Cluster
+    - name: Deploy Helm Chart To Amazon EKS Cluster 
       run: |
          helm install ${{ env.HELM_CHART_NAME }} nginx-helm-chart/
